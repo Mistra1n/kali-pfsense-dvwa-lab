@@ -1,40 +1,43 @@
-# 01 · Setup — VirtualBox networks, VM shells, pfSense base install
+# 01 · Setup — VMware networks, VM shells, pfSense base install
 
-## 1. Download
+## 1. Assets
 
-- [pfSense CE ISO](https://www.pfsense.org/download/)
-- [Ubuntu Server 22.04 LTS ISO](https://ubuntu.com/download/server)
-- [Kali Linux VirtualBox image or ISO](https://www.kali.org/get-kali/)
+| Needed | Status |
+|---|---|
+| pfSense CE (current, 2.9.0 as of writing) | ⚠️ Only have the old `pfSense-2.1-amd64.ova` (2014) — re-download current from [pfsense.org/download](https://www.pfsense.org/download/), AMD64, CE, "VMware" or "ISO" installer image |
+| Ubuntu Server 22.04/24.04 LTS ISO | ❌ Not downloaded yet — [ubuntu.com/download/server](https://ubuntu.com/download/server) |
+| Kali Linux VMware image | ✅ `kali-linux-2026.2-vmware-amd64` on hand |
 
-## 2. Networking plan
+## 2. Networking plan (VMware Workstation Pro — Virtual Network Editor)
 
-Three VirtualBox networks so nothing here touches your real LAN:
+Open **Edit → Virtual Network Editor** (run as administrator) and add two custom host-only networks — nothing bridged to the real LAN or internet:
 
-| Network | Type | Purpose |
-|---|---|---|
-| `pfsense-wan` | Internal Network (VirtualBox) | Kali ↔ pfSense WAN interface |
-| `pfsense-lan` | Internal Network (VirtualBox) | pfSense LAN interface ↔ Ubuntu |
-| *(optional)* `host-admin` | Host-only Adapter | Just for reaching the pfSense web GUI from your host browser |
+| VMnet | Type | Subnet (example) | Purpose |
+|---|---|---|---|
+| `VMnet2` | Host-only, no DHCP (pfSense will hand out LAN DHCP itself later) | `192.168.56.0/24` | Kali ↔ pfSense WAN interface |
+| `VMnet3` | Host-only, no DHCP | `192.168.57.0/24` | pfSense LAN interface ↔ Ubuntu |
 
 ```
-Kali NIC1 ───► pfsense-wan ───► pfSense NIC1 (WAN)
-                                 pfSense NIC2 (LAN) ───► pfsense-lan ───► Ubuntu NIC1
+Kali NIC1 ───► VMnet2 ───► pfSense NIC1 (WAN)
+                            pfSense NIC2 (LAN) ───► VMnet3 ───► Ubuntu NIC1
 ```
+
+Leave VMware's default NAT (`VMnet8`) alone — don't attach it to any of these three VMs, so the lab stays fully isolated.
 
 ## 3. pfSense VM
 
-- 1 vCPU, 1–2 GB RAM, 8–20 GB disk
-- 2 network adapters: NIC1 → `pfsense-wan`, NIC2 → `pfsense-lan`
-- Boot the ISO, accept defaults through install, assign WAN = NIC1 / LAN = NIC2 at the console
+- 1 vCPU, 2 GB RAM, 8–20 GB disk
+- 2 network adapters: NIC1 → Custom (`VMnet2`), NIC2 → Custom (`VMnet3`)
+- Boot the install media, accept defaults through install, assign WAN = first interface / LAN = second interface at the console
 
 Record here once done:
 - pfSense WAN IP: `___________`
-- pfSense LAN IP: `___________` (default `192.168.1.1`, fine to keep)
+- pfSense LAN IP: `___________` (default `192.168.1.1`, fine to keep or re-IP to match `VMnet3`'s subnet)
 
 ## 4. Kali VM
 
 - 2 vCPU, 2 GB RAM, 20 GB disk
-- 1 network adapter → `pfsense-wan`
+- 1 network adapter → Custom (`VMnet2`)
 - Confirm it gets a DHCP lease from pfSense's WAN side (or set static — note which)
 
 Kali IP: `___________`
@@ -42,18 +45,18 @@ Kali IP: `___________`
 ## 5. Ubuntu Server VM
 
 - 1 vCPU, 2 GB RAM, 20 GB disk
-- 1 network adapter → `pfsense-lan`
+- 1 network adapter → Custom (`VMnet3`)
 - Minimal install is fine (DVWA stack goes on in setup step, not here)
 
 Ubuntu IP: `___________`
 
 ## 6. Sanity check before moving on
 
-- [ ] pfSense web GUI reachable from host (via `host-admin` or LAN-side browser)
+- [ ] pfSense web GUI reachable from host (VMware Workstation can usually reach a host-only network directly from the host machine — browse to pfSense's LAN IP)
 - [ ] Kali can `ping` pfSense's WAN IP
 - [ ] Ubuntu can `ping` pfSense's LAN IP
 - [ ] Kali **cannot yet** reach Ubuntu directly (pfSense hasn't been told to allow/route it — confirms the chokepoint is real before you configure anything)
 
-Screenshot the topology (VirtualBox network manager + `ip a` on all three) into `../screenshots/`.
+Screenshot the topology (Virtual Network Editor + `ip a` on all three) into `../screenshots/`.
 
 Next: [`02-firewall-config/`](../02-firewall-config/)

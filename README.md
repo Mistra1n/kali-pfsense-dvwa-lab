@@ -22,7 +22,7 @@ A small, focused lab that puts a pfSense firewall between an attacker (Kali) and
 | `pfsense` | Firewall / router | pfSense CE (latest) | 1–2 GB | 8–20 GB |
 | `ubuntu-dvwa` | Victim / web target | Ubuntu Server 22.04 + Apache/PHP/MySQL + DVWA | 2 GB | 20 GB |
 
-**Hypervisor:** VirtualBox
+**Hypervisor:** VMware Workstation Pro
 
 ## Goals
 
@@ -34,7 +34,7 @@ A small, focused lab that puts a pfSense firewall between an attacker (Kali) and
 
 ## Progress
 
-- [ ] 01 · VirtualBox networks + VM shells created (pfSense, Kali, Ubuntu)
+- [ ] 01 · VMware custom networks + VM shells created (pfSense, Kali, Ubuntu)
 - [ ] 02 · pfSense installed and routing between the two networks
 - [ ] 03 · Ubuntu + DVWA deployed and reachable from Kali
 - [ ] 04 · Baseline attack run with no firewall rules (nmap scan + DVWA exploit) — "before" evidence
@@ -46,7 +46,7 @@ A small, focused lab that puts a pfSense firewall between an attacker (Kali) and
 
 | Folder | Contents |
 |---|---|
-| [`01-setup/`](01-setup/) | VirtualBox network design, VM creation, pfSense base install |
+| [`01-setup/`](01-setup/) | VMware virtual network design, VM creation, pfSense base install |
 | [`02-firewall-config/`](02-firewall-config/) | Interface config, DHCP, the actual firewall rules and why |
 | [`03-attack-simulations/`](03-attack-simulations/) | One write-up per attack, each with a before/after section |
 | [`04-findings/`](04-findings/) | Summary report: what was blocked, what wasn't, lessons learned |
@@ -58,4 +58,4 @@ Every attack in this repo was run **only against machines I own, inside an isola
 
 ## Tools
 
-pfSense CE · Kali Linux · Ubuntu Server · DVWA · nmap · VirtualBox
+pfSense CE · Kali Linux · Ubuntu Server · DVWA · nmap · VMware Workstation Pro
