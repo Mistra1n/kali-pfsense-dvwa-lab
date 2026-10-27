@@ -46,7 +46,7 @@ A small, focused lab that puts a pfSense firewall between an attacker (Kali) and
 
 | Folder | Contents |
 |---|---|
-| [`01-setup/`](01-setup/) | VMware virtual network design, VM creation, pfSense base install |
+| [`01-setup/`](01-setup/) | VMware LAN Segments, VM creation, pfSense base install |
 | [`02-firewall-config/`](02-firewall-config/) | Interface config, DHCP, the actual firewall rules and why |
 | [`03-attack-simulations/`](03-attack-simulations/) | One write-up per attack, each with a before/after section |
 | [`04-findings/`](04-findings/) | Summary report: what was blocked, what wasn't, lessons learned |
