@@ -20,7 +20,7 @@ A small, focused lab that puts a pfSense firewall between an attacker (Kali) and
 |---|---|---|---|---|
 | `kali` | Attacker | Kali Linux | 2 GB | 20 GB |
 | `pfsense` | Firewall / router | pfSense CE (latest) | 1–2 GB | 8–20 GB |
-| `ubuntu-dvwa` | Victim / web target | Ubuntu Server 22.04 + Apache/PHP/MySQL + DVWA | 2 GB | 20 GB |
+| `ubuntu-dvwa` | Victim / web target | Ubuntu Server 26.04 LTS + Apache/PHP/MySQL + DVWA | 2 GB | 20 GB |
 
 **Hypervisor:** VMware Workstation Pro
 

@@ -4,8 +4,8 @@
 
 | Needed | Status |
 |---|---|
-| pfSense CE (current, 2.9.0 as of writing) | ⚠️ Only have the old `pfSense-2.1-amd64.ova` (2014) — re-download current from [pfsense.org/download](https://www.pfsense.org/download/), AMD64, CE, "VMware" or "ISO" installer image |
-| Ubuntu Server 22.04/24.04 LTS ISO | ❌ Not downloaded yet — [ubuntu.com/download/server](https://ubuntu.com/download/server) |
+| pfSense CE (current) | ✅ `netgate-installer-v1.2-RELEASE-amd64.iso` on hand — this is Netgate's unified installer, not the OS image itself; booting it prompts you to pick an edition. **Pick pfSense CE** (not Plus) when asked. |
+| Ubuntu Server LTS ISO | ✅ `ubuntu-26.04.1-live-server-amd64.iso` on hand |
 | Kali Linux VMware image | ✅ `kali-linux-2026.2-vmware-amd64` on hand |
 
 ## 2. Networking plan (VMware Workstation Pro — Virtual Network Editor)
@@ -28,7 +28,8 @@ Leave VMware's default NAT (`VMnet8`) alone — don't attach it to any of these 
 
 - 1 vCPU, 2 GB RAM, 8–20 GB disk
 - 2 network adapters: NIC1 → Custom (`VMnet2`), NIC2 → Custom (`VMnet3`)
-- Boot the install media, accept defaults through install, assign WAN = first interface / LAN = second interface at the console
+- Boot `netgate-installer-v1.2-RELEASE-amd64.iso`; when prompted for edition, **select pfSense CE**
+- Accept defaults through install, assign WAN = first interface / LAN = second interface at the console
 
 Record here once done:
 - pfSense WAN IP: `___________`
@@ -46,7 +47,7 @@ Kali IP: `___________`
 
 - 1 vCPU, 2 GB RAM, 20 GB disk
 - 1 network adapter → Custom (`VMnet3`)
-- Minimal install is fine (DVWA stack goes on in setup step, not here)
+- Boot `ubuntu-26.04.1-live-server-amd64.iso`, minimal install is fine (DVWA stack goes on in setup step, not here)
 
 Ubuntu IP: `___________`
 
