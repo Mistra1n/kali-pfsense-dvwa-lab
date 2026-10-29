@@ -14,17 +14,13 @@ Using VMware's **LAN Segments** (VM Settings → Network Adapter → Custom → 
 
 | Adapter | On | Connects to | Purpose |
 |---|---|---|---|
-| pfSense Adapter 1 | pfSense | Bridged | Real internet access, for pfSense package/OS updates only — not part of the attack path |
+| pfSense Adapter 1 | pfSense | ~~Bridged~~ **Dropped** | Was going to be real internet access for pfSense updates only. Hit a VMware host-networking limit (see findings log, 2026-10-29) — not worth fighting since it's not part of the attack path. Leave disconnected/unused. |
 | pfSense Adapter 2 | pfSense | `LAN Segment` (attacker-facing) | This is pfSense's **WAN** interface for lab purposes — Kali lives here |
 | pfSense Adapter 3 | pfSense | `LAN Segment 2` | This is pfSense's **LAN** interface — Ubuntu/DVWA lives here |
 | Kali Adapter 1 | Kali | Same `LAN Segment` as pfSense Adapter 2 | Attacker network |
 | Ubuntu Adapter 1 | Ubuntu | Same `LAN Segment 2` as pfSense Adapter 3 | Protected network |
 
 ```
-                         real internet (updates only)
-                                │
-                          pfSense Adapter 1 (Bridged)
-                                │
 Kali ──► LAN Segment ──► pfSense Adapter 2 (WAN, lab-facing)
                           pfSense Adapter 3 (LAN) ──► LAN Segment 2 ──► Ubuntu/DVWA
 ```
@@ -34,9 +30,10 @@ Kali and Ubuntu must **never** be on the same LAN Segment — that would put the
 ## 3. pfSense VM
 
 - 2 GB RAM, 8–20 GB disk (matches current build)
-- 3 network adapters as above: Adapter 1 → Bridged, Adapter 2 → Custom LAN Segment (attacker side), Adapter 3 → Custom LAN Segment 2 (protected side)
+- 2 network adapters in use: Adapter 2 → Custom LAN Segment (attacker side), Adapter 3 → Custom LAN Segment 2 (protected side). Adapter 1 left disconnected — no real internet needed for this lab.
 - Boot `netgate-installer-v1.2-RELEASE-amd64.iso`; when prompted for edition, **select pfSense CE**
-- At the console, assign interfaces: **WAN = Adapter 2** (the attacker-facing segment, *not* the bridged adapter), **LAN = Adapter 3**
+- Installer may warn **"Cannot reach the Netgate Servers, please verify your network settings!"** — expected, since WAN has no internet path yet. Click OK and continue.
+- At the console, assign interfaces: **WAN = Adapter 2** (the attacker-facing segment), **LAN = Adapter 3**
 - Accept pfSense defaults for LAN: `192.168.1.1/24` with DHCP enabled
 
 Record here once done:
